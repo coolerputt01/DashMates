@@ -12,11 +12,15 @@ const float JUMP_STRENGTH = -350.f;
 class Player{
     public:
         sf::RectangleShape sprite;
+        sf::Texture texture;
         sf::Vector2f velocity;
         bool onGround = false;
-        Player(sf::Vector2f width_height = sf::Vector2f({50.f, 50.f})) : sprite(width_height){
+        Player(sf::Vector2f width_height = sf::Vector2f({80.f, 80.f})) : sprite(width_height){
+            if(!texture.loadFromFile("assets/sprites/Character.png",false,sf::IntRect({10,10},{128 * 4 ,128 * 4}))){
+                cerr<<"An error ocurred\n";
+            }
+            sprite.setTexture(&texture);
             sprite.setOrigin(sf::Vector2f({0.f, 0.f}));
-            sprite.setFillColor(sf::Color::Green);
         }
 };
 
@@ -39,7 +43,7 @@ void gameLoop(Player &character, sf::RenderWindow &window){
     text.setFillColor(sf::Color::White);
 
     while(is_in_game && window.isOpen()){
-        while (const std::optional event = window.pollEvent() )
+        while (const std::optional event = window.pollEvent())
         {
             if(event->is<sf::Event::Closed>()){
                 window.close();
@@ -47,7 +51,7 @@ void gameLoop(Player &character, sf::RenderWindow &window){
         }
         float delta = clock.restart().asSeconds();
 
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color::White);
         window.draw(character.sprite);
         window.draw(text);
         window.display();
